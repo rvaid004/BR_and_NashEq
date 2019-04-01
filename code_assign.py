@@ -107,11 +107,12 @@ class randomizer:
         print (belief1)
 
         expPay1 = list()
-        maxPayoff = np.round(payoff2[0][0] * belief1[0], decimals=2)
+        maxPayoff = np.round(payoff1[0][0] * belief1[0], decimals=2)
+
         #print (payoff1)
-        for c in range(rows):
-            for r in range(cols):
-                calc = np.round(payoff2[r][c] * belief1[c], decimals=2)
+        for r in range(rows):
+            for c in range(cols):
+                calc = np.round(payoff1[r][c] * belief1[c], decimals=2)
                 if(calc > maxPayoff):
                     maxPayoff = calc
                 
