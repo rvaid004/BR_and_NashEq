@@ -139,12 +139,26 @@ class randomizer:
 
        expPay1 = list()
        expSum = 0
-       maxPayoff1 = np.round(payoff1[0][0] * belief1[0] + payoff1[0][1] * belief1[1], decimals=2)
+       check = 0
+    
+       brSum1 = list()
+       maxPayoff1 = np.round(payoff1[0][0] * belief1[0], decimals=2)
        maxRow = ""
        #print (payoff1)
        for r in range(rows):
-           for c in range(cols-1):
-                calc = np.round(payoff1[r][c] * belief1[c] + payoff1[r][c+1] * belief1[c+1], decimals=2) 
+           for c in range(cols):
+                #calc = np.round(payoff1[r][c] * belief1[c] + payoff1[r][c+1] * belief1[c+1], decimals=2)
+                calc = np.round(payoff1[r][c] * belief1[c], decimals= 2) 
+                # print("This is the payoff for 1:", calc)
+                if(check != cols):
+                    expSum = calc + expSum
+                    # print("This is check", check)
+                    check+= 1
+                if(check == cols):
+                    brSum1.append(round(expSum, 2))
+                    expSum = 0
+                    check = 0
+                
                 
                 if(calc >= maxPayoff1):
                     maxPayoff1 = calc
@@ -152,40 +166,55 @@ class randomizer:
                     maxRow = checkNash.index[r]
                 expPay1.append(calc)
        
-
+       print("This is the sample", brSum1)
        belief2 = np.round(np.random.dirichlet(np.ones(rows),size=1), decimals = 2)
        belief2 = belief2.reshape(-1)
-       print (expPay1)
+       print ("This is expay1", expPay1)
        print("---------------------------------------------")
        print("Player1 Expected Payoffs with Player 2 mixing")
        print("---------------------------------------------")
        
 
        for var in range(rows):
-            print("U(" + strategyVarP1[var] + ",", belief1, "=", expPay1[var])
+            print("U(" + strategyVarP1[var] + ",", belief1, "=", brSum1[var])
 
+    
        
        print("-------------------------------------------")
        print("Player1 Best Response with Player 2 mixing")
        print("-------------------------------------------")
-       print("BR", belief1, "= {", maxRow, "}")
+       print("BR", belief1, "= {",maxRow,  "}")
+    
 
        expPay2 = list()
-       maxPayoff2 = np.round(payoff2[0][0] * belief2[0] + payoff2[1][0] * belief2[1], decimals=2)
+       brSum2 = list()
+       expSum = 0
+       check = 0
+       maxPayoff2 = np.round(payoff2[0][0] * belief2[0], decimals=2)
        for c in range(cols):
-           for r in range(rows-1):
-               calc = np.round(payoff2[r][c] * belief2[r] + payoff2[r+1][c] * belief2[r+1], decimals=2)
-               if(calc >= maxPayoff2):
+           for r in range(rows):
+            #    calc = np.round(payoff2[r][c] * belief2[r] + payoff2[r+1][c] * belief2[r+1], decimals=2)
+                calc = np.round(payoff2[r][c] * belief2[c], decimals= 2) 
+                if(check != rows):
+                    expSum = calc + expSum
+                    # print("This is check", check)
+                    check+= 1
+                if(check == rows):
+                    brSum2.append(round(expSum, 2))
+                    expSum = 0
+                    check = 0
+
+                if(calc >= maxPayoff2):
                    maxPayoff2 = calc
                    maxCol = checkNash.columns[c]
-               expPay2.append(calc)
+                expPay2.append(calc)
 
        print("---------------------------------------------")
        print("Player2 Expected Payoffs with Player 1 mixing")
        print("---------------------------------------------")
        
        for var in range(cols):
-            print("U(" + strategyVarP2[var] + ",", belief2, "=", expPay2[var])
+            print("U(" + strategyVarP2[var] + ",", belief2, "=", brSum2[var])
 
        print("-------------------------------------------")
        print("Player2 Best Response with Player 1 mixing")
