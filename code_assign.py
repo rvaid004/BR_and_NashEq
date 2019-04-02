@@ -23,6 +23,8 @@ import itertools
 import random
 import numpy as np
 from pandas import *
+from sympy.solvers import solve
+from sympy import Symbol
 
 class randomizer:
 
@@ -126,11 +128,13 @@ class randomizer:
        print (checkNash)
        print("\n")
 
-
+       nashEqExists = False
        for row in checkNash.itertuples():
            for col in range(cols):              
                if(getattr(row, checkNash.columns[col]) == ('H', 'H')):
                    (r,c) = (row.Index, checkNash.columns[col])
+                   (n1, n2) = (r,c)
+                   nashEqExists = True
                    print ("Nash Equilibrium(s): ", (r, c))
       
 
@@ -253,17 +257,44 @@ class randomizer:
        print("Player 2 -> U", belief2, ",",belief1, "=", round(mixedPayoff2,2))
 
 
-
        if(rows == 2 and cols == 2):
-            print("------------------------------------------------------")
-            print("Player 1 & 2 Indifferent Mix Probabilities")
-            print("-------------------------------------------------------")
 
             if(nashEqExists):
                 print("------------------------------------------------------")
                 print("Nash Pure Equilibrium Location")
                 print("-------------------------------------------------------")
                 print (checkNash)
+                print("-------------------------------------------------------")
+                print("Nash Equilibriums: ", (n1,n2))
+                print("\n")
+                print("----------------------------------------------")
+                print("Player 1 & 2 Indifferent Mix Probabilities")
+                print("----------------------------------------------")
+                print("Normal Form has Pure Strategy Equilibrium\n")
+            else:
+                print("------------------------------------------------------")
+                print("Player 1 & 2 Indifferent Mix Probabilities")
+                print("-------------------------------------------------------")
+                q = Symbol('q')
+                p = Symbol('p')
+                #q * payoff1[0][0] + (1-q) * payoff1[0][1]) - (q * payoff1[1][0] + (1-q) * payoff1[1][1]
+                firstEq = solve(q * payoff1[0][0] + (1-q) * payoff1[0][1] - (q * payoff1[1][0] + (1-q) * payoff1[1][1]))
+                dec1 = round(float(firstEq[0]), 2)
+                diff1 = round(1-dec1 ,2)
+                secondEq = solve(p * payoff2[0][0] + (1-p) * payoff2[1][0] - (p * payoff2[0][1] + (1-p) * payoff2[1][1]))
+                dec2 =  round(float(secondEq[0]), 2)
+                diff2 = round(1-dec2 ,2)
+
+                print ("Player 1 probability of strategies (" + strategyVarP1[0] + ") =", dec1)
+                print ("Player 1 probability of strategies (" + strategyVarP1[1] + ") =", diff1)
+                print ("Player 2 probability of strategies (" + strategyVarP2[0] + ") =", dec2)
+                print ("Player 2 probability of strategies (" + strategyVarP2[1] + ") =", diff2)
+                print("------------------------------------------------------")
+                print("Nash Pure Equilibrium Location")
+                print("-------------------------------------------------------")
+                print (checkNash)
+                print("-------------------------------------------------------")
+                print ("Nash Equilibrium(s): None\n")
             
        
 
