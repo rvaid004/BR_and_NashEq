@@ -58,17 +58,12 @@ class randomizer:
        print ("\n")
        print("------------------------------------")
        print("Player: Player 1's payoffs")
-       payoff1 = np.random.randint(-99,99, (rows,cols))
-       #temp1 = [[]]
-      
+       payoff1 = np.random.randint(-99,99, (rows,cols))      
 
        temp1 = [[str(y) for y in x] for x in payoff1]
 
-       print (temp1)
-       payoff1 = DataFrame(payoff1)
-       payoff1.rows = strategyVarP1
-       # payoff1.rename(columns = dict(zip(payoff1.columns, variableNames)))
-       print (payoff1)
+       tempPayoff1 = DataFrame(payoff1)
+       print (tempPayoff1)
        count = 1
        print("------------------------------------")
        print("\n")
@@ -82,15 +77,17 @@ class randomizer:
            print (" ", end="")
            count+=1
        print ("}")
+
+
        print("------------------------------------")
        print ("\n")
        print("------------------------------------")
        print("Player: Player 2's payoffs")
        payoff2 = np.random.randint(-99,99, (rows,cols))
        temp2 = [[str(y) for y in x] for x in payoff2]
-       payoff2 = DataFrame(payoff2)
-       payoff2.columns = strategyVarP2
-       print (DataFrame(payoff2))
+       tempPayoff2 = DataFrame(payoff2)
+
+       print (tempPayoff2)
        print("------------------------------------")
        print ("\n")
 
@@ -102,6 +99,8 @@ class randomizer:
        print("Display Normal Form")
        print("=======================================")
        display1 = DataFrame(newL)
+       display1.index = strategyVarP1
+       display1.columns = strategyVarP2
        # display1.columns = [for ]
        print(display1)
        mystring = ""
@@ -122,54 +121,91 @@ class randomizer:
        print("Nash Pure Equilibrium Locations:")
        print("=======================================")
        checkNash = DataFrame(newTempL)
+       checkNash.index = strategyVarP1
+       checkNash.columns = strategyVarP2
        print (checkNash)
        print("\n")
-     
-       #nashArr = [[0 for x in range(rows)] for y in range(cols)]
-      
-       # for index, row in checkNash.iterrows():
-       #     print(row[index], row[index+1])
+
 
        for row in checkNash.itertuples():
-           for col in range(cols):
-               if(checkNash.iloc[row.Index][col] == ('H', 'H')):
-                   (r,c) = (row.Index, col)
+           for col in range(cols):              
+               if(getattr(row, checkNash.columns[col]) == ('H', 'H')):
+                   (r,c) = (row.Index, checkNash.columns[col])
                    print ("Nash Equilibrium(s): ", (r, c))
-               print(checkNash.iloc[row.Index][col])
       
 
        belief1 = np.round(np.random.dirichlet(np.ones(cols),size=1), decimals = 2)
        belief1 = belief1.reshape(-1)
-       print (belief1)
 
        expPay1 = list()
-       maxPayoff = np.round(payoff1[0][0] * belief1[0], decimals=2)
-
+       expSum = 0
+       maxPayoff1 = np.round(payoff1[0][0] * belief1[0] + payoff1[0][1] * belief1[1], decimals=2)
+       maxRow = ""
        #print (payoff1)
        for r in range(rows):
-           for c in range(cols):
-               calc = np.round(payoff1[r][c] * belief1[c], decimals=2)
-               if(calc > maxPayoff):
-                   maxPayoff = calc
-               expPay1.append(calc)
+           for c in range(cols-1):
+                calc = np.round(payoff1[r][c] * belief1[c] + payoff1[r][c+1] * belief1[c+1], decimals=2) 
+                
+                if(calc >= maxPayoff1):
+                    maxPayoff1 = calc
+                    print (checkNash.index[r])
+                    maxRow = checkNash.index[r]
+                expPay1.append(calc)
+       
 
        belief2 = np.round(np.random.dirichlet(np.ones(rows),size=1), decimals = 2)
        belief2 = belief2.reshape(-1)
-       print (belief2)
-       print(expPay1)
+       print (expPay1)
+       print("---------------------------------------------")
+       print("Player1 Expected Payoffs with Player 2 mixing")
+       print("---------------------------------------------")
+       
+
+       for var in range(rows):
+            print("U(" + strategyVarP1[var] + ",", belief1, "=", expPay1[var])
+
+       
+       print("-------------------------------------------")
+       print("Player1 Best Response with Player 2 mixing")
+       print("-------------------------------------------")
+       print("BR", belief1, "= {", maxRow, "}")
 
        expPay2 = list()
-       maxPayoff2 = np.round(payoff2[0][0] * belief2[0], decimals=2)
+       maxPayoff2 = np.round(payoff2[0][0] * belief2[0] + payoff2[1][0] * belief2[1], decimals=2)
        for c in range(cols):
-           for r in range(rows):
-               calc = np.round(payoff2[r][c] * belief2[r], decimals=2)
-               if(calc > maxPayoff2):
+           for r in range(rows-1):
+               calc = np.round(payoff2[r][c] * belief2[r] + payoff2[r+1][c] * belief2[r+1], decimals=2)
+               if(calc >= maxPayoff2):
                    maxPayoff2 = calc
+                   maxCol = checkNash.columns[c]
                expPay2.append(calc)
 
-       print (expPay2)
-       print (maxPayoff2)
+       print("---------------------------------------------")
+       print("Player2 Expected Payoffs with Player 1 mixing")
+       print("---------------------------------------------")
+       
+       for var in range(cols):
+            print("U(" + strategyVarP2[var] + ",", belief2, "=", expPay2[var])
 
+       print("-------------------------------------------")
+       print("Player2 Best Response with Player 1 mixing")
+       print("-------------------------------------------")
+       print("BR", belief2, "= {", maxCol, "}")
+
+    #    mix1 = list()
+    #    maxMix1 = np.round(payoff1[r][c] * belief1[c] * belief2[r] + payoff1[r][c+1] * belief1[c+1] * belief2[r+1], decimals=2)
+    #    for r in range(rows-1):
+    #        for c in range(cols-1):
+    #            calc = np.round(payoff1[r][c] * belief1[c] * belief2[r] + payoff1[r][c+1] * belief1[c+1] * belief2[r+1], decimals=2)
+    #            print (calc)
+    #            if(calc >= maxMix1):
+    #                maxMix1 = calc
+    #                print (checkNash.index[r])
+    #            mix1.append(calc)
+        
+    #    print (mix1)
+    #    print (maxMix1)
+       
 
    dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
    dlg2.SetValue("")
