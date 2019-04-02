@@ -171,7 +171,7 @@ class randomizer:
        belief2 = belief2.reshape(-1)
        print ("This is expay1", expPay1)
        print("---------------------------------------------")
-       print("Player1 Expected Payoffs with Player 2 mixing")
+       print("Player1 Expected Payoffs with Player 2 Mixing")
        print("---------------------------------------------")
        
 
@@ -181,7 +181,7 @@ class randomizer:
     
        
        print("-------------------------------------------")
-       print("Player1 Best Response with Player 2 mixing")
+       print("Player1 Best Response with Player 2 Mixing")
        print("-------------------------------------------")
        print("BR", belief1, "= {",maxRow,  "}")
     
@@ -217,6 +217,7 @@ class randomizer:
             print("U(" + strategyVarP2[v] + ",", belief2, "=", brSum2[v])
        index2 = np.argmax(brSum2)
        maxCol = checkNash.columns[index2]
+       
        print("-------------------------------------------")
        print("Player2 Best Response with Player 1 mixing")
        print("-------------------------------------------")
@@ -235,6 +236,35 @@ class randomizer:
         
     #    print (mix1)
     #    print (maxMix1)
+       mixedPayoff1 = 0
+       mixedPayoff2 = 0
+       for r1 in range(rows):
+        #    print("This is brSum1: results", brSum1[r1])
+        #    print("This is belief results", belief2[r1])
+           mixedPayoff1 = (brSum1[r1] * belief2[r1]) + mixedPayoff1
+           mixedPayoff2 = (brSum2[r1] * belief1[r1]) + mixedPayoff2
+
+       
+
+       print("------------------------------------------------------")
+       print("Player 1 & 2 Expected Payoffs with both Player Mixing")
+       print("-------------------------------------------------------")
+       print("Player 1 -> U", belief2, ",",belief1, "=", round(mixedPayoff1,2))
+       print("Player 2 -> U", belief2, ",",belief1, "=", round(mixedPayoff2,2))
+
+
+
+       if(rows == 2 and cols == 2):
+            print("------------------------------------------------------")
+            print("Player 1 & 2 Indifferent Mix Probabilities")
+            print("-------------------------------------------------------")
+
+            if(nashEqExists):
+                print("------------------------------------------------------")
+                print("Nash Pure Equilibrium Location")
+                print("-------------------------------------------------------")
+                print (checkNash)
+            
        
 
    dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
