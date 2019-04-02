@@ -158,14 +158,14 @@ class randomizer:
                     brSum1.append(round(expSum, 2))
                     expSum = 0
                     check = 0
-                
-                
-                if(calc >= maxPayoff1):
-                    maxPayoff1 = calc
-                    print (checkNash.index[r])
-                    maxRow = checkNash.index[r]
+                # if(calc >= maxPayoff1):
+                #     maxPayoff1 = calc
+                #     print (checkNash.index[r])
+                #     maxRow = checkNash.index[r]
                 expPay1.append(calc)
-       
+       index  = np.argmax(brSum1)
+       print (index)
+       maxRow = checkNash.index[index]
        print("This is the sample", brSum1)
        belief2 = np.round(np.random.dirichlet(np.ones(rows),size=1), decimals = 2)
        belief2 = belief2.reshape(-1)
@@ -194,7 +194,7 @@ class randomizer:
        for c in range(cols):
            for r in range(rows):
             #    calc = np.round(payoff2[r][c] * belief2[r] + payoff2[r+1][c] * belief2[r+1], decimals=2)
-                calc = np.round(payoff2[r][c] * belief2[c], decimals= 2) 
+                calc = np.round(payoff2[r][c] * belief2[r], decimals= 2) 
                 if(check != rows):
                     expSum = calc + expSum
                     # print("This is check", check)
@@ -204,18 +204,19 @@ class randomizer:
                     expSum = 0
                     check = 0
 
-                if(calc >= maxPayoff2):
-                   maxPayoff2 = calc
-                   maxCol = checkNash.columns[c]
+                # if(calc >= maxPayoff2):
+                #    maxPayoff2 = calc
+                #    maxCol = checkNash.columns[c]
                 expPay2.append(calc)
 
        print("---------------------------------------------")
        print("Player2 Expected Payoffs with Player 1 mixing")
        print("---------------------------------------------")
        
-       for var in range(cols):
-            print("U(" + strategyVarP2[var] + ",", belief2, "=", brSum2[var])
-
+       for v in range(cols):
+            print("U(" + strategyVarP2[v] + ",", belief2, "=", brSum2[v])
+       index2 = np.argmax(brSum2)
+       maxCol = checkNash.columns[index2]
        print("-------------------------------------------")
        print("Player2 Best Response with Player 1 mixing")
        print("-------------------------------------------")
