@@ -82,16 +82,16 @@ class randomizer:
         newL = list(lists)
         newTempL = list(tempLists)
         print("Display Normal Form")
-        print(DataFrame(newL))
+        display1 = DataFrame(newL)
+        print(display1)
         mystring = ""
-
 
         for c in range(cols):
             max = np.max(payoff1[:,c])
             nash1 = np.argmax(payoff1[:,c])
             temp1[nash1][c] = 'H'
             
-        
+       
         for r in range(rows):
             max = np.max(payoff2[r,:])
             nash2 = np.argmax(payoff2[r,:])
@@ -99,9 +99,23 @@ class randomizer:
 
         print ("\n")
         print("Nash Pure Equilibrium Locations:")
-        print (DataFrame(newTempL))
-
+        checkNash = DataFrame(newTempL)
+        print (checkNash)
+        print("\n")
        
+        #nashArr = [[0 for x in range(rows)] for y in range(cols)] 
+        
+        # for index, row in checkNash.iterrows():
+        #     print(row[index], row[index+1])
+
+        for row in checkNash.itertuples():
+            for col in range(cols):
+                if(checkNash.iloc[row.Index][col] == ('H', 'H')):
+                    (r,c) = (row.Index, col)
+                    print ("Nash Equilibrium(s): ", (r, c))
+                print(checkNash.iloc[row.Index][col])
+        
+
         belief1 = np.round(np.random.dirichlet(np.ones(cols),size=1), decimals = 2)
         belief1 = belief1.reshape(-1)
         print (belief1)
@@ -115,11 +129,24 @@ class randomizer:
                 calc = np.round(payoff1[r][c] * belief1[c], decimals=2)
                 if(calc > maxPayoff):
                     maxPayoff = calc
-                
                 expPay1.append(calc)
 
-        print (expPay1)
-        print (maxPayoff)
+        belief2 = np.round(np.random.dirichlet(np.ones(rows),size=1), decimals = 2)
+        belief2 = belief2.reshape(-1)
+        print (belief2)
+        print(expPay1)
+
+        expPay2 = list()
+        maxPayoff2 = np.round(payoff2[0][0] * belief2[0], decimals=2)
+        for c in range(cols):
+            for r in range(rows):
+                calc = np.round(payoff2[r][c] * belief2[r], decimals=2)
+                if(calc > maxPayoff2):
+                    maxPayoff2 = calc
+                expPay2.append(calc)
+
+        print (expPay2)
+        print (maxPayoff2)
 
 
     dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
