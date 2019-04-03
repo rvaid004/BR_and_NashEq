@@ -137,7 +137,7 @@ class randomizer:
                    nashEqExists = True
                    print ("Nash Equilibrium(s): ", (r, c))
       
-
+       print("\n")
        belief1 = np.round(np.random.dirichlet(np.ones(cols),size=1), decimals = 2)
        belief1 = belief1.reshape(-1)
 
@@ -168,27 +168,23 @@ class randomizer:
                 #     maxRow = checkNash.index[r]
                 expPay1.append(calc)
        index  = np.argmax(brSum1)
-       print (index)
        maxRow = checkNash.index[index]
-       print("This is the sample", brSum1)
        belief2 = np.round(np.random.dirichlet(np.ones(rows),size=1), decimals = 2)
        belief2 = belief2.reshape(-1)
-       print ("This is expay1", expPay1)
        print("---------------------------------------------")
        print("Player1 Expected Payoffs with Player 2 Mixing")
        print("---------------------------------------------")
        
-
        for var in range(rows):
             print("U(" + strategyVarP1[var] + ",", belief1, "=", brSum1[var])
-
+       print("\n")
     
-       
        print("-------------------------------------------")
        print("Player1 Best Response with Player 2 Mixing")
        print("-------------------------------------------")
        print("BR", belief1, "= {",maxRow,  "}")
-    
+       print("\n")
+
 
        expPay2 = list()
        brSum2 = list()
@@ -219,13 +215,16 @@ class randomizer:
        
        for v in range(cols):
             print("U(" + strategyVarP2[v] + ",", belief2, "=", brSum2[v])
+       print("\n")
        index2 = np.argmax(brSum2)
        maxCol = checkNash.columns[index2]
+
        
        print("-------------------------------------------")
        print("Player2 Best Response with Player 1 mixing")
        print("-------------------------------------------")
        print("BR", belief2, "= {", maxCol, "}")
+       print("\n")
 
     #    mix1 = list()
     #    maxMix1 = np.round(payoff1[r][c] * belief1[c] * belief2[r] + payoff1[r][c+1] * belief1[c+1] * belief2[r+1], decimals=2)
@@ -255,7 +254,7 @@ class randomizer:
        print("-------------------------------------------------------")
        print("Player 1 -> U", belief2, ",",belief1, "=", round(mixedPayoff1,2))
        print("Player 2 -> U", belief2, ",",belief1, "=", round(mixedPayoff2,2))
-
+       print("\n")
 
        if(rows == 2 and cols == 2):
 
@@ -289,6 +288,7 @@ class randomizer:
                 print ("Player 1 probability of strategies (" + strategyVarP1[1] + ") =", diff1)
                 print ("Player 2 probability of strategies (" + strategyVarP2[0] + ") =", dec2)
                 print ("Player 2 probability of strategies (" + strategyVarP2[1] + ") =", diff2)
+                print("\n")
                 print("------------------------------------------------------")
                 print("Nash Pure Equilibrium Location")
                 print("-------------------------------------------------------")
