@@ -259,6 +259,7 @@ class randomizer:
            strategyVarP1.append("A"+ str(count))
            count+=1
         strategyVarP2 = list()
+        list1 = list()
         count = 1
         for j in range(cols):
             strategyVarP2.append("B"+ str(count))
@@ -271,14 +272,37 @@ class randomizer:
         normForm = DataFrame(manualPay1)
         normForm.index = strategyVarP1
         normForm.columns = strategyVarP2
+        #manualPay1 = manualPay1.reshape(-1)
+        # temp1 = [[tuple(int(y) for y in x) for x in manualPay1]]
+        # print("Temp", temp1)
+        print(manualPay1)
+        max1 = 0
+        max2 = 0
+
+        for n in range(rows):
+            max1 = 0 
+            for m in range(cols):
+                x,y = manualPay1[n,m]
+                newV = int(x)
+                if(newV > max1):
+                    max1 = newV
+                    
+
+               
+        print(max1)
         print("=======================================")
         print("Display Normal Form")
         print("=======================================")
         print(normForm)
         print("\n")
+        
+
+
         print("=======================================")   
         print("Nash Pure Equilibrium Locations:")
         print("=======================================")
+
+
         nashEqExists = False
         for row in normForm.itertuples():
            for col in range(cols):              
