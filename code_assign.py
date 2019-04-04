@@ -47,7 +47,6 @@ class randomizer:
        print("------------------------------------")
        print("Player: Player 1's payoffs")
        payoff1 = np.random.randint(-99,99, (rows,cols))      
-
        temp1 = [[str(y) for y in x] for x in payoff1]
 
        tempPayoff1 = DataFrame(payoff1)
@@ -264,16 +263,57 @@ class randomizer:
         for j in range(cols):
             strategyVarP2.append("B"+ str(count))
             count+=1
-
+        manualPay1 = list()
         for x in range(rows):
             for y in range(cols):
-                print("Enter payoff for (", strategyVarP1[x], ", ", strategyVarP2[y], ")")
-                input1 = input()
-            
+                print("Enter payoff for (", strategyVarP1[x], ", ", strategyVarP2[y], ") = ", end="")
+                manualPay1.append(tuple(map(str,input().split(','))))
+        
+        tempM1 = [list(i) for i in manualPay1]
+
+        print(manualPay1)
+        print(DataFrame(manualPay1))    
+
+   print("Enter (R)andom or (M)anual payoffs enteries")
+   inputName = input()
+   if(inputName == 'R' or inputName == 'r'):
+        print("Enter the number of rows: ", end="")
+        inputRows = input()
+        print("Enter the number of columns: ", end="")
+        inputCols = input()
+        payoffRandomizer(int(inputRows), int(inputCols))
+   elif(inputName == 'M' or inputName == 'm'):
+       print("Enter the number of rows: ", end="")
+       inputRows = input()
+       print("Enter the number of columns: ", end="")
+       inputCols = input()
+       payOffManual(int(inputRows), int(inputCols))
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 
    def onButton(event):
        print ("Button pressed.")
@@ -307,21 +347,27 @@ class randomizer:
             payoffRandomizer(int(p1),int(p2))
 
    elif(dlg.GetValue()=='M' or dlg.GetValue().lower() == 'm'):
-        dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
-        dlg2.SetValue("")
-        dlg2.Destroy()
 
-        dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
-        dlg3.SetValue("")
-        dlg3.Destroy()
+       inputRows = input()
+       inputCols = input()
 
-        if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
-            p1 = dlg2.GetValue()
-            print("Enter the number of rows: " +  p1)
-            p2 = dlg3.GetValue()
-            print("Enter the number of columns: " + p2)
-            payOffManual(int(p1), int(p2))
+       payOffManual(inputRows, inputCols)
+       
+        # dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
+        # dlg2.SetValue("")
+        # dlg2.Destroy()
 
+        # dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
+        # dlg3.SetValue("")
+        # dlg3.Destroy()
+
+        # if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
+        #     p1 = dlg2.GetValue()
+        #     print("Enter the number of rows: " +  p1)
+        #     p2 = dlg3.GetValue()
+        #     print("Enter the number of columns: " + p2)
+        #     payOffManual(int(p1), int(p2))
+"""
 
  
 
