@@ -28,21 +28,7 @@ from sympy import Symbol
 
 class randomizer:
 
-   def onButton(event):
-       print ("Button pressed.")
-  
-   app = wx.App()
-  
-   frame = wx.Frame(None, -1, 'win.py')
-   frame.SetSize(0,0,200,50)
-  
-   # Create text input
-   dlg = wx.TextEntryDialog(frame, 'Enter (R)andom or (M)anual payoffs enteries','Text Entry')
-   dlg.SetValue("")
-   if dlg.ShowModal() == wx.ID_OK:
-       print('You entered: %s\n' % dlg.GetValue())
-   dlg.Destroy()
-
+    
    def payoffRandomizer(rows, cols):
        count = 1
        strategyVarP1 = list()
@@ -103,7 +89,6 @@ class randomizer:
        display1 = DataFrame(newL)
        display1.index = strategyVarP1
        display1.columns = strategyVarP2
-       # display1.columns = [for ]
        print(display1)
        mystring = ""
 
@@ -148,24 +133,17 @@ class randomizer:
        brSum1 = list()
        maxPayoff1 = np.round(payoff1[0][0] * belief1[0], decimals=2)
        maxRow = ""
-       #print (payoff1)
        for r in range(rows):
            for c in range(cols):
-                #calc = np.round(payoff1[r][c] * belief1[c] + payoff1[r][c+1] * belief1[c+1], decimals=2)
                 calc = np.round(payoff1[r][c] * belief1[c], decimals= 2) 
-                # print("This is the payoff for 1:", calc)
                 if(check != cols):
                     expSum = calc + expSum
-                    # print("This is check", check)
                     check+= 1
                 if(check == cols):
                     brSum1.append(round(expSum, 2))
                     expSum = 0
                     check = 0
-                # if(calc >= maxPayoff1):
-                #     maxPayoff1 = calc
-                #     print (checkNash.index[r])
-                #     maxRow = checkNash.index[r]
+
                 expPay1.append(calc)
        index  = np.argmax(brSum1)
        maxRow = checkNash.index[index]
@@ -193,20 +171,14 @@ class randomizer:
        maxPayoff2 = np.round(payoff2[0][0] * belief2[0], decimals=2)
        for c in range(cols):
            for r in range(rows):
-            #    calc = np.round(payoff2[r][c] * belief2[r] + payoff2[r+1][c] * belief2[r+1], decimals=2)
                 calc = np.round(payoff2[r][c] * belief2[r], decimals= 2) 
                 if(check != rows):
                     expSum = calc + expSum
-                    # print("This is check", check)
                     check+= 1
                 if(check == rows):
                     brSum2.append(round(expSum, 2))
                     expSum = 0
                     check = 0
-
-                # if(calc >= maxPayoff2):
-                #    maxPayoff2 = calc
-                #    maxCol = checkNash.columns[c]
                 expPay2.append(calc)
 
        print("---------------------------------------------")
@@ -226,24 +198,9 @@ class randomizer:
        print("BR", belief2, "= {", maxCol, "}")
        print("\n")
 
-    #    mix1 = list()
-    #    maxMix1 = np.round(payoff1[r][c] * belief1[c] * belief2[r] + payoff1[r][c+1] * belief1[c+1] * belief2[r+1], decimals=2)
-    #    for r in range(rows-1):
-    #        for c in range(cols-1):
-    #            calc = np.round(payoff1[r][c] * belief1[c] * belief2[r] + payoff1[r][c+1] * belief1[c+1] * belief2[r+1], decimals=2)
-    #            print (calc)
-    #            if(calc >= maxMix1):
-    #                maxMix1 = calc
-    #                print (checkNash.index[r])
-    #            mix1.append(calc)
-        
-    #    print (mix1)
-    #    print (maxMix1)
        mixedPayoff1 = 0
        mixedPayoff2 = 0
        for r1 in range(rows):
-        #    print("This is brSum1: results", brSum1[r1])
-        #    print("This is belief results", belief2[r1])
            mixedPayoff1 = (brSum1[r1] * belief2[r1]) + mixedPayoff1
            mixedPayoff2 = (brSum2[r1] * belief1[r1]) + mixedPayoff2
 
@@ -276,7 +233,6 @@ class randomizer:
                 print("-------------------------------------------------------")
                 q = Symbol('q')
                 p = Symbol('p')
-                #q * payoff1[0][0] + (1-q) * payoff1[0][1]) - (q * payoff1[1][0] + (1-q) * payoff1[1][1]
                 firstEq = solve(q * payoff1[0][0] + (1-q) * payoff1[0][1] - (q * payoff1[1][0] + (1-q) * payoff1[1][1]))
                 dec1 = round(float(firstEq[0]), 2)
                 diff1 = round(1-dec1 ,2)
@@ -296,22 +252,76 @@ class randomizer:
                 print("-------------------------------------------------------")
                 print ("Nash Equilibrium(s): None\n")
             
-       
 
-   dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
-   dlg2.SetValue("")
-   dlg2.Destroy()
+   def payOffManual(rows, cols):
+        count = 1
+        strategyVarP1 = list()
+        for n in range(rows):
+           strategyVarP1.append("A"+ str(count))
+           count+=1
+        strategyVarP2 = list()
+        count = 1
+        for j in range(cols):
+            strategyVarP2.append("B"+ str(count))
+            count+=1
 
-   dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
-   dlg3.SetValue("")
-   dlg3.Destroy()
+        for x in range(rows):
+            for y in range(cols):
+                print("Enter payoff for (", strategyVarP1[x], ", ", strategyVarP2[y], ")")
+                input1 = input()
+            
 
-   if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
-       p1 = dlg2.GetValue()
-       p2 = dlg3.GetValue()
-       payoffRandomizer(int(p1),int(p2))
 
+
+
+
+   def onButton(event):
+       print ("Button pressed.")
   
+   app = wx.App()
+  
+   frame = wx.Frame(None, -1, 'win.py')
+   frame.SetSize(0,0,200,50)
+  
+   # Create text input
+   dlg = wx.TextEntryDialog(frame, 'Enter (R)andom or (M)anual payoffs enteries','Text Entry')
+   dlg.SetValue("")
+
+   if dlg.ShowModal() == wx.ID_OK:
+       print('You entered: %s' % dlg.GetValue())
+   dlg.Destroy()
+
+   if(dlg.GetValue() == 'R' or dlg.GetValue().lower() == 'r'):
+   
+        dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
+        dlg2.SetValue("")
+        dlg2.Destroy()
+
+        dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
+        dlg3.SetValue("")
+        dlg3.Destroy()
+
+        if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
+            p1 = dlg2.GetValue()
+            p2 = dlg3.GetValue()
+            payoffRandomizer(int(p1),int(p2))
+
+   elif(dlg.GetValue()=='M' or dlg.GetValue().lower() == 'm'):
+        dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
+        dlg2.SetValue("")
+        dlg2.Destroy()
+
+        dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
+        dlg3.SetValue("")
+        dlg3.Destroy()
+
+        if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
+            p1 = dlg2.GetValue()
+            print("Enter the number of rows: " +  p1)
+            p2 = dlg3.GetValue()
+            print("Enter the number of columns: " + p2)
+            payOffManual(int(p1), int(p2))
+
 
  
 
