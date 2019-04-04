@@ -263,16 +263,33 @@ class randomizer:
         for j in range(cols):
             strategyVarP2.append("B"+ str(count))
             count+=1
-        manualPay1 = list()
+        manualPay1 = np.empty((rows,cols), object)
         for x in range(rows):
             for y in range(cols):
                 print("Enter payoff for (", strategyVarP1[x], ", ", strategyVarP2[y], ") = ", end="")
-                manualPay1.append(tuple(map(str,input().split(','))))
+                manualPay1[x,y] = tuple(map(str,input().split(',')))
+        normForm = DataFrame(manualPay1)
+        normForm.index = strategyVarP1
+        normForm.columns = strategyVarP2
+        print("=======================================")
+        print("Display Normal Form")
+        print("=======================================")
+        print(normForm)
+        print("\n")
+        print("=======================================")   
+        print("Nash Pure Equilibrium Locations:")
+        print("=======================================")
+        nashEqExists = False
+        for row in normForm.itertuples():
+           for col in range(cols):              
+               if(getattr(row, normForm.columns[col]) == ('H', 'H')):
+                   (r,c) = (row.Index, normForm.columns[col])
+                   (n1, n2) = (r,c)
+                   nashEqExists = True
+                   print ("Nash Equilibrium(s): ", (r, c))
         
-        tempM1 = [list(i) for i in manualPay1]
 
-        print(manualPay1)
-        print(DataFrame(manualPay1))    
+
 
    print("Enter (R)andom or (M)anual payoffs enteries")
    inputName = input()
