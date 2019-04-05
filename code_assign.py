@@ -89,6 +89,7 @@ class randomizer:
        display1.index = strategyVarP1
        display1.columns = strategyVarP2
        print(display1)
+       print("---------------------------------------")
        mystring = ""
 
        for c in range(cols):
@@ -110,6 +111,7 @@ class randomizer:
        checkNash.index = strategyVarP1
        checkNash.columns = strategyVarP2
        print (checkNash)
+       print("---------------------------------------")
        print("\n")
 
        nashEqExists = False
@@ -120,7 +122,9 @@ class randomizer:
                    (n1, n2) = (r,c)
                    nashEqExists = True
                    print ("Nash Equilibrium(s): ", (r, c))
-      
+
+       if(nashEqExists == False):
+            print("Nash Equlibrium(s): None")
        print("\n")
        belief1 = np.round(np.random.dirichlet(np.ones(cols),size=1), decimals = 2)
        belief1 = belief1.reshape(-1)
@@ -206,7 +210,7 @@ class randomizer:
        
 
        print("------------------------------------------------------")
-       print("Player 1 & 2 Expected Payoffs with both Player Mixing")
+       print("Player 1 & 2 Expected Payoffs with both Players Mixing")
        print("-------------------------------------------------------")
        print("Player 1 -> U", belief2, ",",belief1, "=", round(mixedPayoff1,2))
        print("Player 2 -> U", belief2, ",",belief1, "=", round(mixedPayoff2,2))
@@ -215,11 +219,11 @@ class randomizer:
        if(rows == 2 and cols == 2):
 
             if(nashEqExists):
-                print("------------------------------------------------------")
-                print("Nash Pure Equilibrium Location")
-                print("-------------------------------------------------------")
+                print("=======================================")   
+                print("Nash Pure Equilibrium Locations:")
+                print("=======================================")
                 print (checkNash)
-                print("-------------------------------------------------------")
+                print("---------------------------------------")
                 print("Nash Equilibriums: ", (n1,n2))
                 print("\n")
                 print("----------------------------------------------")
@@ -269,50 +273,110 @@ class randomizer:
             for y in range(cols):
                 print("Enter payoff for (", strategyVarP1[x], ", ", strategyVarP2[y], ") = ", end="")
                 manualPay1[x,y] = tuple(map(str,input().split(',')))
+            print("--------------------------------")
         normForm = DataFrame(manualPay1)
         normForm.index = strategyVarP1
         normForm.columns = strategyVarP2
-        #manualPay1 = manualPay1.reshape(-1)
-        # temp1 = [[tuple(int(y) for y in x) for x in manualPay1]]
-        # print("Temp", temp1)
-        print(manualPay1)
-        max1 = 0
-        max2 = 0
-
+    
+        tempPay1 = manualPay1.copy()
         for n in range(rows):
-            max1 = 0 
+            max1= 0
             for m in range(cols):
                 x,y = manualPay1[n,m]
-                newV = int(x)
+                newV = int(y)
                 if(newV > max1):
                     max1 = newV
+                    index = m
+                    
+            p,q = tempPay1[n,index]
+            q = 'H'
+            tempPay1[n,index] = p,q
+
+
+        indexMax = 0
+
+        for m in range(cols):
+            max2 = 0
+            for n in range(rows):
+                x,y = manualPay1[n,m]
+                newV = int(x)
+                if(newV > max2):
+                    max2 = newV
+                    val1, val2 = tempPay1[n,m]
+                    indexMax = n
+                if(n == rows-1):
+                    tempPay1[indexMax,m] = 'H', val2
                     
 
-               
-        print(max1)
         print("=======================================")
         print("Display Normal Form")
         print("=======================================")
         print(normForm)
+        print("-------------------------------------------------------")
         print("\n")
         
 
-
+        nashForm = DataFrame(tempPay1)
         print("=======================================")   
         print("Nash Pure Equilibrium Locations:")
         print("=======================================")
-
+        nashForm.index = strategyVarP1
+        nashForm.columns = strategyVarP2
+        print(nashForm)
+        print("---------------------------------------")
 
         nashEqExists = False
-        for row in normForm.itertuples():
+        for row in nashForm.itertuples():
            for col in range(cols):              
-               if(getattr(row, normForm.columns[col]) == ('H', 'H')):
-                   (r,c) = (row.Index, normForm.columns[col])
+               if(getattr(row, nashForm.columns[col]) == ('H', 'H')):
+                   (r,c) = (row.Index, nashForm.columns[col])
                    (n1, n2) = (r,c)
                    nashEqExists = True
                    print ("Nash Equilibrium(s): ", (r, c))
+        print("\n")
         
+        if(nashEqExists == False):
+            print("Nash Equlibrium(s): None\n")
+        if(rows == 2 and cols == 2):
+            if(nashEqExists):
+                print("----------------------------------------------")
+                print("Player 1 & 2 Indifferent Mix Probabilities")
+                print("----------------------------------------------")
+                print("Normal Form has Pure Strategy Equilibrium\n")
+            else:
+                print("------------------------------------------------------")
+                print("Player 1 & 2 Indifferent Mix Probabilities")
+                print("-------------------------------------------------------")
+                q = Symbol('q')
+                p = Symbol('p')
+                x1,y1  = manualPay1[0,0]
+                newx1 = int(x1)
+                newy1 = int(y1)
+                x2,y2 = manualPay1[0,1]
+                newx2 = int(x2)
+                newy2 = int(y2)
+                x3,y3 = manualPay1[1,0]
+                newx3 = int(x3)
+                newy3 = int(y3)
+                x4,y4 = manualPay1[1,1]
+                newx4 = int(x4)
+                newy4 = int(y4)
 
+
+                firstEq = solve(q * newx1 + (1-q) * newx2 - (q * newx3 + (1-q) * newx4))
+                dec1 = round(float(firstEq[0]), 2)
+                diff1 = round(1-dec1 ,2)
+                secondEq = solve(p * newy1 + (1-p) * newy2 - (p * newy3 + (1-p) * newy4))
+                dec2 =  round(float(secondEq[0]), 2)
+                diff2 = round(1-dec2 ,2)
+
+                print ("Player 1 probability of strategies (" + strategyVarP1[0] + ") =", dec1)
+                print ("Player 1 probability of strategies (" + strategyVarP1[1] + ") =", diff1)
+                print ("Player 2 probability of strategies (" + strategyVarP2[0] + ") =", dec2)
+                print ("Player 2 probability of strategies (" + strategyVarP2[1] + ") =", diff2)
+                print("\n")
+
+        
 
 
    print("Enter (R)andom or (M)anual payoffs enteries")
@@ -354,61 +418,6 @@ class randomizer:
 
 
 
-"""
-
-   def onButton(event):
-       print ("Button pressed.")
-  
-   app = wx.App()
-  
-   frame = wx.Frame(None, -1, 'win.py')
-   frame.SetSize(0,0,200,50)
-  
-   # Create text input
-   dlg = wx.TextEntryDialog(frame, 'Enter (R)andom or (M)anual payoffs enteries','Text Entry')
-   dlg.SetValue("")
-
-   if dlg.ShowModal() == wx.ID_OK:
-       print('You entered: %s' % dlg.GetValue())
-   dlg.Destroy()
-
-   if(dlg.GetValue() == 'R' or dlg.GetValue().lower() == 'r'):
-   
-        dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
-        dlg2.SetValue("")
-        dlg2.Destroy()
-
-        dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
-        dlg3.SetValue("")
-        dlg3.Destroy()
-
-        if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
-            p1 = dlg2.GetValue()
-            p2 = dlg3.GetValue()
-            payoffRandomizer(int(p1),int(p2))
-
-   elif(dlg.GetValue()=='M' or dlg.GetValue().lower() == 'm'):
-
-       inputRows = input()
-       inputCols = input()
-
-       payOffManual(inputRows, inputCols)
-       
-        # dlg2 = wx.TextEntryDialog(frame, 'Enter the number of rows', 'Text Entry')
-        # dlg2.SetValue("")
-        # dlg2.Destroy()
-
-        # dlg3 = wx.TextEntryDialog(frame, 'Enter the number of columns', 'Text Entry')
-        # dlg3.SetValue("")
-        # dlg3.Destroy()
-
-        # if dlg2.ShowModal() == wx.ID_OK and dlg3.ShowModal() == wx.ID_OK:
-        #     p1 = dlg2.GetValue()
-        #     print("Enter the number of rows: " +  p1)
-        #     p2 = dlg3.GetValue()
-        #     print("Enter the number of columns: " + p2)
-        #     payOffManual(int(p1), int(p2))
-"""
 
  
 
