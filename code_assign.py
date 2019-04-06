@@ -279,6 +279,7 @@ class randomizer:
         normForm.columns = strategyVarP2
     
         tempPay1 = manualPay1.copy()
+        indexMax1 = 0
         for n in range(rows):
             max1= 0
             for m in range(cols):
@@ -291,9 +292,17 @@ class randomizer:
             p,q = tempPay1[n,index]
             q = 'H'
             tempPay1[n,index] = p,q
-
+            if(m == cols-1):
+                for a in range(rows):
+                        newX, newY = manualPay1[n,m] 
+                        newV2 = int(newY)
+                        if(newV2 == max1):
+                            value1, value2 =  tempPay1[n,m]
+                            indexMax1 = m
+                            tempPay1[n,indexMax1] = value1, 'H'
 
         indexMax = 0
+        indexMax1 = 0
 
         for m in range(cols):
             max2 = 0
@@ -304,9 +313,20 @@ class randomizer:
                     max2 = newV
                     val1, val2 = tempPay1[n,m]
                     indexMax = n
+                # if(newV == max2):
+                #      countRepeat = countRepeat + 1
+
                 if(n == rows-1):
                     tempPay1[indexMax,m] = 'H', val2
                     
+                    for a in range(rows):
+                        newX, newY = manualPay1[n,m] 
+                        newV1 = int(newX)
+                        if(newV1 == max2):
+                            value1, value2 =  tempPay1[n,m]
+                            indexMax1 = n
+                            tempPay1[indexMax1,m] = 'H', value2
+
 
         print("=======================================")
         print("Display Normal Form")
