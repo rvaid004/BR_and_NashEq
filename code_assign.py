@@ -240,7 +240,7 @@ class randomizer:
 
        print("------------------------------------------------------")
        print("Player 1 & 2 Expected Payoffs with both Players Mixing")
-       print("-------------------------------------------------------")
+       print("------------------------------------------------------")
        print("Player 1 -> U", belief2, ",",belief1, "=", round(mixedPayoff1,2))
        print("Player 2 -> U", belief2, ",",belief1, "=", round(mixedPayoff2,2))
        print("\n")
@@ -264,7 +264,7 @@ class randomizer:
             else:
                 print("------------------------------------------------------")
                 print("Player 1 & 2 Indifferent Mix Probabilities")
-                print("-------------------------------------------------------")
+                print("------------------------------------------------------")
 
                 q = Symbol('q')     #python library that uses symbols for math equations
                 p = Symbol('p')    
@@ -286,7 +286,7 @@ class randomizer:
                 print("\n")
                 print("------------------------------------------------------")
                 print("Nash Pure Equilibrium Location")
-                print("-------------------------------------------------------")
+                print("------------------------------------------------------")
                 print (checkNash)
                 print("-------------------------------------------------------")
                 print ("Nash Equilibrium(s): None\n")
