@@ -280,27 +280,34 @@ class randomizer:
     
         tempPay1 = manualPay1.copy()
         indexMax1 = 0
+
+
+        
         for n in range(rows):
             max1= 0
             for m in range(cols):
                 x,y = manualPay1[n,m]
                 newV = int(y)
                 if(newV > max1):
+                    # print("This is max1", max1)
                     max1 = newV
                     index = m
-                    
-            p,q = tempPay1[n,index]
-            q = 'H'
-            tempPay1[n,index] = p,q
-            if(m == cols-1):
-                for a in range(rows):
-                        newX, newY = manualPay1[n,m] 
-                        newV2 = int(newY)
-                        if(newV2 == max1):
-                            value1, value2 =  tempPay1[n,m]
-                            indexMax1 = m
-                            tempPay1[n,indexMax1] = value1, 'H'
 
+                if(m == cols-1):
+                    for a in range(cols):
+                            newX, newY = manualPay1[n,a] 
+                            newV2 = int(newY)
+                            # print("this is max1 repeat", max1)
+                            if(newV2 == max1):
+                                value1, value2 =  tempPay1[n,a]
+                                indexMax1 = a
+                                tempPay1[n,indexMax1] = value1, 'H'
+
+                    
+        #     p,q = tempPay1[n,index]
+        #     q = 'H'
+        #     tempPay1[n,index] = p,q
+                
         indexMax = 0
         indexMax1 = 0
 
@@ -320,10 +327,10 @@ class randomizer:
                     tempPay1[indexMax,m] = 'H', val2
                     
                     for a in range(rows):
-                        newX, newY = manualPay1[n,m] 
+                        newX, newY = manualPay1[a,m] 
                         newV1 = int(newX)
-                        if(newV1 == max2):
-                            value1, value2 =  tempPay1[n,m]
+                        if(newV1 == max2): 
+                            value1, value2 =  tempPay1[a,m]
                             indexMax1 = n
                             tempPay1[indexMax1,m] = 'H', value2
 
