@@ -331,7 +331,7 @@ class randomizer:
                         newV1 = int(newX)
                         if(newV1 == max2): 
                             value1, value2 =  tempPay1[a,m]
-                            indexMax1 = n
+                            indexMax1 = a
                             tempPay1[indexMax1,m] = 'H', value2
 
 
